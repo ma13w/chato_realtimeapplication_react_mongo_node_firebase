@@ -13,7 +13,7 @@ const pusher = new Pusher({
 });
 
 const app = express();
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(cors())
@@ -79,7 +79,7 @@ app.post('/api/v1/messages', (req,res)=>{
     })
 })
 
-
+    
 
 app.listen(port,()=>{
     console.log(`server start on port: ${port}`);
