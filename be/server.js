@@ -29,7 +29,11 @@ mongoose.connect(connectionDbUrl,
         // useUnifiedTopology : true
     },
     (err)=>{
-        if(!err) console.log("Mongo funziona");
+        if(!err){
+            console.log("MongDB functoion")
+        }else{
+            console.log("MongoDB Failed To Connect")
+        }
     }
 );
 
@@ -39,13 +43,15 @@ db.once('open', function(){
     console.log('Db Connected')
     const msgCollection = db.collection("messagecontents")
     const changeStream = msgCollection.watch();
+
     changeStream.on('change', (change)=>{
         console.log(change)
         if(change.operationType === 'insert'){
             const record = change.fullDocument
-            pusher.trigger("messages", "insert", {
+            pusher.trigger("messages", "inserted", {
                 'name': record.name,
-                'message': record.message
+                'message': record.message,
+                'timestamp ': record.timestamp
             });
         }else{
             console.log('Not Trigger Pusher')
@@ -55,7 +61,7 @@ db.once('open', function(){
 })
 
 app.get('/api', (req,res)=>{
-    res.status(200).send("Benvenuto sul server");
+    res.status(200).send("Hello World!");
 })
 
 app.get('/api/v1/messages/sync', (req,res)=>{
